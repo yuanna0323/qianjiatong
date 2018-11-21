@@ -1,13 +1,11 @@
 import React from 'react'
 import MenuConfig from './../../config/menuConfig'
-import { Menu, Icon } from 'antd';
+import { Menu} from 'antd';
 import './index.css'
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 export default class NavLeft extends React.Component {
     componentWillMount() {
         const menuTreeNode = this.renderMenu(MenuConfig);
-        console.log(menuTreeNode)
         this.setState({
             menuTreeNode
         })
@@ -15,9 +13,7 @@ export default class NavLeft extends React.Component {
     //通过箭头函数的这种方式实现this指向当前函数
     //菜单渲染
     renderMenu = (data) => {
-        console.log(data)
         return data.map((item) => {
-            console.log(item)
             if (item.children) {
                 return (
                     <SubMenu title={item.title} key={item.key}>
