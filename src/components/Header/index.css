@@ -1,0 +1,27 @@
+.header .header-top {
+  height: 60px;
+  line-height: 60px;
+  text-align: right;
+  padding-right: 20px;
+}
+.header .header-top span {
+  padding-right: 40px;
+}
+.header .header-top a {
+  color: #f9c700;
+}
+.header .breadcrumb {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 20px;
+  border-top: 1px solid #f9c700;
+}
+.header .breadcrumb .breadcrumb-title {
+  text-align: center;
+}
+.header .breadcrumb .weather {
+  text-align: right;
+}
+.header .breadcrumb .weather .weather-detail {
+  margin-left: 10px;
+}
