@@ -1,3 +1,4 @@
+@import './default.less';
 .container {
     .nav-left {
         color: #fff;
@@ -5,7 +6,11 @@
         background: #001529;
     }
     .main {
+        background: @colorL;
         height: calc(100vh);
+    }
+    .header {
+        background: @colorM;
     }
     .content {
         position: relative;
