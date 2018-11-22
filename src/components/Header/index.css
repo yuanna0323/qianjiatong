@@ -21,7 +21,16 @@
 }
 .header .breadcrumb .weather {
   text-align: right;
+  font-size: 14px;
 }
 .header .breadcrumb .weather .weather-detail {
   margin-left: 10px;
+}
+.header .breadcrumb .weather .weather-img {
+  margin-left: 10px;
+}
+.header .breadcrumb .weather .weather-img img {
+  height: 15px;
+  position: relative;
+  top: -2px;
 }
