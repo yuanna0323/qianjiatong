@@ -8,6 +8,7 @@
 .container .main {
   background: #f1f3f5;
   height: calc(100vh);
+  overflow: auto;
 }
 .container .header {
   background: #fff;
