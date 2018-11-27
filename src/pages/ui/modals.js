@@ -14,6 +14,22 @@ export default class Buttons extends React.Component {
             [type]: true
         })
     }
+    handleConfirm = (type) => {
+        // 在这里Modal.confirm和Modal['confirm']是一样的
+        Modal[type]({
+            title: '确认？',
+            content: '你确定你学会了React了吗？',
+            // 确认事件
+            onOk() {
+                //在这里调用接口
+                console.log('Ok')
+            },
+            // 取消事件
+            onCancel() {
+                console.log('Cancel')
+            }
+        })
+    }
     render() {
         return (
             <div>
@@ -24,6 +40,13 @@ export default class Buttons extends React.Component {
                     <Button type="primary" onClick={() => this.handleOpten('showModal3')}>顶部20px弹框</Button>
                     <Button type="primary" onClick={() => this.handleOpten('showModal4')}>水平垂直居中</Button>
                 </Card>
+                <Card title="信息确认框" className="card-wrap">
+                    {/* 传参必须通过箭头函数进行实现 */}
+                    <Button type="primary" onClick={() => this.handleConfirm('confirm')}>Confirm</Button>
+                    <Button type="primary" onClick={() => this.handleConfirm('info')}>Info</Button>
+                    <Button type="primary" onClick={() => this.handleConfirm('success')}>Success</Button>
+                    <Button type="primary" onClick={() => this.handleConfirm('warning')}>Wraning</Button>
+                </Card>
                 <Modal
                     title="React"
                     visible={this.state.showModal1}
@@ -33,9 +56,46 @@ export default class Buttons extends React.Component {
                         })
                     }}
                 >
-
+                    <p>欢迎你!</p>
                 </Modal>
-            </div>
+                <Modal
+                    title="React"
+                    visible={this.state.showModal2}
+                    okText="好的"
+                    cancelText="算了"
+                    onCancel={() => {
+                        this.setState({
+                            showModal2: false
+                        })
+                    }}
+                >
+                    <p>欢迎你!</p>
+                </Modal>
+                <Modal
+                    title="React"
+                    style={{ top: 20 }}
+                    visible={this.state.showModal3}
+                    onCancel={() => {
+                        this.setState({
+                            showModal3: false
+                        })
+                    }}
+                >
+                    <p>欢迎你!</p>
+                </Modal>
+                <Modal
+                    title="React"
+                    wrapClassName="vertical-center-modal"
+                    visible={this.state.showModal4}
+                    onCancel={() => {
+                        this.setState({
+                            showModal4: false
+                        })
+                    }}
+                >
+                    <p>欢迎你!</p>
+                </Modal>
+            </div >
         )
     }
 }
