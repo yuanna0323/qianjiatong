@@ -6,10 +6,38 @@ const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
 class FormRegister extends React.Component {
+
+    state = {}
+
+    handleSubmit = () => {
+        let userInfo = this.props.form.getFieldsValue();
+        console.log(JSON.stringify(userInfo))
+        message.success(`${userInfo.userName} 恭喜你，您通过本次表单组件学习，当前密码为：${userInfo.userPwd}`)
+    }
+
+    getBase64 = (img, callback) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+    }
+
+    handleChange = (info) => {
+        if (info.file.status === 'uploading') {
+            this.setState({ loading: true });
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            this.getBase64(info.file.originFileObj, imageUrl => this.setState({
+                userImg: imageUrl,
+                loading: false,
+            }));
+        }
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
-            // 当小于576像素的时候栅格系统为24份，大于576像素的时候占4份
             labelCol: {
                 xs: 24,
                 sm: 4
@@ -19,16 +47,22 @@ class FormRegister extends React.Component {
                 sm: 12
             }
         }
+        const offsetLayout = {
+            wrapperCol: {
+                xs: 24,
+                sm: {
+                    span: 12,
+                    offset: 4
+                }
+            }
+        }
         const rowObject = {
-            minRows: 4,
-            maxRows: 24
+            minRows: 4, maxRows: 6
         }
         return (
             <div>
                 <Card title="注册表单">
-                    {/* 水平表单 */}
                     <Form layout="horizontal">
-                        {/* 通过三个点解构赋值 */}
                         <FormItem label="用户名" {...formItemLayout}>
                             {
                                 getFieldDecorator('userName', {
@@ -40,22 +74,20 @@ class FormRegister extends React.Component {
                                         }
                                     ]
                                 })(
-                                    // prefix是一个前缀
                                     <Input placeholder="请输入用户名" />
                                 )
                             }
                         </FormItem>
-                        <FormItem label="密码"  {...formItemLayout}>
+                        <FormItem label="密码" {...formItemLayout}>
                             {
-                                getFieldDecorator('userName', {
+                                getFieldDecorator('userPwd', {
                                     initialValue: ''
                                 })(
-                                    // prefix是一个前缀
-                                    <Input placeholder="请输入密码" />
+                                    <Input type="password" placeholder="请输入密码" />
                                 )
                             }
                         </FormItem>
-                        <FormItem label="性别"  {...formItemLayout}>
+                        <FormItem label="性别" {...formItemLayout}>
                             {
                                 getFieldDecorator('sex', {
                                     initialValue: '1'
@@ -67,37 +99,35 @@ class FormRegister extends React.Component {
                                 )
                             }
                         </FormItem>
-                        <FormItem label="年龄"  {...formItemLayout}>
+                        <FormItem label="年龄" {...formItemLayout}>
                             {
                                 getFieldDecorator('age', {
-                                    initialValue: '18'
+                                    initialValue: 18
                                 })(
                                     <InputNumber />
                                 )
                             }
                         </FormItem>
-                        <FormItem label="当前状态"  {...formItemLayout}>
+                        <FormItem label="当前状态" {...formItemLayout}>
                             {
                                 getFieldDecorator('state', {
                                     initialValue: '2'
                                 })(
-                                    // mode指定select可以进行多选
                                     <Select>
                                         <Option value="1">咸鱼一条</Option>
-                                        <Option value="2">绝代风华</Option>
-                                        <Option value="3">北大才子</Option>
+                                        <Option value="2">风华浪子</Option>
+                                        <Option value="3">北大才子一枚</Option>
                                         <Option value="4">百度FE</Option>
                                         <Option value="5">创业者</Option>
                                     </Select>
                                 )
                             }
                         </FormItem>
-                        <FormItem label="爱好"  {...formItemLayout}>
+                        <FormItem label="爱好" {...formItemLayout}>
                             {
                                 getFieldDecorator('interest', {
                                     initialValue: ['2', '5']
                                 })(
-                                    // mode指定select可以进行多选
                                     <Select mode="multiple">
                                         <Option value="1">游泳</Option>
                                         <Option value="2">打篮球</Option>
@@ -156,17 +186,29 @@ class FormRegister extends React.Component {
                                 getFieldDecorator('userImg')(
                                     <Upload
                                         listType="picture-card"
+                                        showUploadList={false}
+                                        action="//jsonplaceholder.typicode.com/posts/"
+                                        onChange={this.handleChange}
                                     >
-
+                                        {this.state.userImg ? <img src={this.state.userImg} /> : <Icon type="plus" />}
                                     </Upload>
                                 )
                             }
                         </FormItem>
+                        <FormItem {...offsetLayout}>
+                            {
+                                getFieldDecorator('userImg')(
+                                    <Checkbox>我已阅读过<a href="#">慕课协议</a></Checkbox>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem {...offsetLayout}>
+                            <Button type="primary" onClick={this.handleSubmit}>注册</Button>
+                        </FormItem>
                     </Form>
-
                 </Card>
-            </div >
-        )
+            </div>
+        );
     }
 }
 export default Form.create()(FormRegister);
