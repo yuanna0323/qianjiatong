@@ -1,9 +1,9 @@
 import React from 'react'
 import { Card, Table } from 'antd'
-
+import axios from './../../axios/index'
 export default class Basic extends React.Component {
     state = {
-
+        dataSource2: []
     }
     componentDidMount() {
         const data = [
@@ -41,6 +41,29 @@ export default class Basic extends React.Component {
         this.setState({
             dataSource: data
         })
+        this.request();
+    }
+    request = () => {
+        axios.ajax({
+            url: '/table/list',
+            data: {
+                params: {
+                    page: 1
+                }
+            }
+        }).then((res) => {
+            this.setState({
+                dataSource2: res.result
+            })
+        })
+        // let baseUrl = 'https://www.easy-mock.com/mock/5bff630e7eb9262450270ef4'
+        // axios.get(baseUrl + '/table/list').then((res) => {
+        //     if (res.status == '200' && res.data.code == '0') {
+        //         this.setState({
+        //             dataSource2: res.data.result
+        //         })
+        //     }
+        // })
     }
     render() {
         const columns = [
@@ -119,6 +142,14 @@ export default class Basic extends React.Component {
                         bordered
                         columns={columns}
                         dataSource={this.state.dataSource}
+                        pagination={false}
+                    />
+                </Card>
+                <Card title="动态数据渲染表格" style={{ margin: '10px 0' }}>
+                    <Table
+                        bordered
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
                         pagination={false}
                     />
                 </Card>
