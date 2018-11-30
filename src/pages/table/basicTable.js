@@ -1,6 +1,7 @@
 import React from 'react'
-import { Card, Table } from 'antd'
+import { Card, Table, Modal, Button, message } from 'antd'
 import axios from './../../axios/index'
+import Message from '../ui/message';
 export default class Basic extends React.Component {
     state = {
         dataSource2: []
@@ -38,6 +39,10 @@ export default class Basic extends React.Component {
                 time: '09:00'
             },
         ]
+        // 设置key值
+        data.map((item, index) => {
+            item.key = index;
+        })
         this.setState({
             dataSource: data
         })
@@ -49,11 +54,18 @@ export default class Basic extends React.Component {
             data: {
                 params: {
                     page: 1
-                }
+                },
+                isShowLoading: true
             }
         }).then((res) => {
+            // 给返回的数据源动态的添加一个key
+            res.result.map((item, index) => {
+                item.key = index;
+            })
             this.setState({
-                dataSource2: res.result
+                dataSource2: res.result,
+                selectedRowKeys: [],
+                selectedRows: null
             })
         })
         // let baseUrl = 'https://www.easy-mock.com/mock/5bff630e7eb9262450270ef4'
@@ -65,6 +77,39 @@ export default class Basic extends React.Component {
         //     }
         // })
     }
+    onRowClick = (record, index) => {
+        let selectKey = [index];
+        Modal.info({
+            title: '信息',
+            content: `用户名 :${record.userName},用户爱好：${record.interest}`
+        })
+        this.setState({
+            selectedRowKeys: selectKey,
+            selectedItem: record
+        })
+    }
+    //多选复选框删除
+    handleDelete = (() => {
+        let rows = this.state.selectedRows;
+        let ids = [];
+        (rows || []).map((item) => {
+            ids.push(item.id)
+        })
+
+        Modal.confirm({
+            title: '删除提示',
+            content: `您确定要删除这些数据吗？${ids.join(',')}`,
+            onOk: () => {
+                message.success('删除成功')
+                this.request()
+            }
+            // onOk: () => {
+            //     message.success('删除成功');
+            //     this.request();
+            // }
+
+        })
+    })
     render() {
         const columns = [
             {
@@ -134,6 +179,23 @@ export default class Basic extends React.Component {
                 dataIndex: 'time'
             }
         ]
+        const { selectedRowKeys } = this.state;
+        // const selectedRowKeys = this.state.selectedRowKeys;
+        const rowSelection = {
+            type: 'radio',
+            selectedRowKeys
+        }
+        const rowCheckSelection = {
+            type: 'checkbox',
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+
+                this.setState({
+                    selectedRowKeys,
+                    selectedRows
+                })
+            }
+        }
         return (
             <div>
                 {/* columns表头;dataSource表体数据; bordered边框；pagination分页*/}
@@ -145,9 +207,49 @@ export default class Basic extends React.Component {
                         pagination={false}
                     />
                 </Card>
-                <Card title="动态数据渲染表格" style={{ margin: '10px 0' }}>
+                <Card title="动态数据渲染表格-MOCK" style={{ margin: '10px 0' }}>
                     <Table
                         bordered
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={false}
+                    />
+                </Card>
+                <Card title="MOCK-单选" style={{ margin: '10px 0' }}>
+                    <Table
+                        bordered
+                        rowSelection={rowSelection}
+                        onRow={(record, index) => {
+                            return {
+                                onClick: () => {
+                                    this.onRowClick(record, index)
+                                }
+                            }
+                        }}
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={false}
+                    />
+                </Card>
+                <Card title="MOCK-复选框" style={{ margin: '10px 0' }}>
+                    <div>
+                        <Button onClick={this.handleDelete} style={{ marginBottom: '10px' }}>删除</Button>
+                    </div>
+                    <Table
+                        bordered
+                        rowSelection={rowCheckSelection}
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={false}
+                    />
+                </Card>
+                <Card title="" style={{ margin: '10px 0' }}>
+                    <div>
+                        <Button onClick={this.handleDelete} style={{ marginBottom: '10px' }}>删除</Button>
+                    </div>
+                    <Table
+                        bordered
+                        rowSelection={rowCheckSelection}
                         columns={columns}
                         dataSource={this.state.dataSource2}
                         pagination={false}
