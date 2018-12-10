@@ -14,6 +14,7 @@ import FormLogin from './pages/form/login'
 import FormRegister from './pages/form/register'
 import Basic from './pages/table/basicTable'
 import High from './pages/table/highTable'
+import City from './pages/city'
 
 import NoMatch from './pages/nomatch'
 import { HashRouter, Route, Switch } from 'react-router-dom'
@@ -39,7 +40,7 @@ export default class IRouter extends React.Component {
                                     <Route path="/admin/form/reg" component={FormRegister} />
                                     <Route path="/admin/table/basic" component={Basic} />
                                     <Route path="/admin/table/high" component={High} />
-
+                                    <Route path="/admin/city" component={City} />
                                     <Route component={NoMatch} />
                                 </Switch>
                             </Admin>
